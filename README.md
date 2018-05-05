@@ -46,6 +46,9 @@ object Host server1 {
 }
 ```
 
+* Note: In this example we created a simple .conf file for a host, however your conf files may contain any type of object that Icinga2 supports
+* https://www.icinga.com/docs/icinga2/latest/doc/09-object-types/
+
 # Create runner script
 
 We are also going to create another new file that will be used by Gitlab to pull any updates to the Icinga2 server
@@ -284,7 +287,7 @@ Test:
 Deploy:
 ![Gitlab - job passed deploy](/images/job_terminal_passed_deploy.png)
 
-Here is an example of a 'Failed' job for the 'Test' stage.  A configuration file was created with invalid data:
+Here is an example of a 'Failed' job for the 'Test' stage.  When this stage fails, the process stops and nothing gets deployed to the Icinga2 server.  For this example, a configuration file was created with invalid data:
 
 ![Gitlab - job failed test](/images/job_terminal_failed_test.png)
 
