@@ -131,7 +131,7 @@ The key's randomart image is:
 
 Now that we have the public and private keys generated, we need to put them in the right place.
 
-To deploy the public key to our production Icinga2 server, look at this file and copy the contents to clipboard:
+To deploy the public key to our production Icinga2 server, look at your file and copy the contents to clipboard:
 
 * Note, please generate your own keys, do not use these example keys!!!
 
@@ -182,7 +182,7 @@ bIWtUU081vklopv8UxQk2YIrDD4PtDBlAASMEoJHmPEnsC7b3dKN
 -----END RSA PRIVATE KEY-----
 ```
 
-Copy this private key to your clipboard and go back to your Gitlab project.
+Copy ~~this~~ your private key to your clipboard and go back to your Gitlab project.
 
 # Gitlab variables
 
@@ -200,6 +200,8 @@ Enter in the following variables:
 * ICINGA_SERVER - The IP/DNS Name of your Icinga2 server
 * ICINGA_CONFIG_DIR - The directory where your Icinga2 config lives as well as the 'gitlab-icinga2-cd.sh' script
 
+* Note: order does not matter
+
 ![Gitlab - variables](/images/variables.png)
 
 Once you have put them all in, click on 'Hide values' and then on 'Save variables'
@@ -211,7 +213,7 @@ when we make commits to our project.
 
 * Read more here: https://docs.gitlab.com/ee/ci/quick_start/
 
-As we did before when we created our first server, create a new file and name it '.gitlab-ci.yml' (yes, with a leading 'dot / .')
+As we did before when we created our first server, create a new file and name it '.gitlab-ci.yml' (yes, with a leading 'dot .')
 
 ```
 image: debian:latest
