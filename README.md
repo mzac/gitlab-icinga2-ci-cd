@@ -26,18 +26,18 @@ On your Gitlab installation, create a Project that will contain your Icinga2 con
 * Note: You can create directories if you'd to make it easier to track your files, such as a directory for servers, routers, etc.
 Icinga2 will parse through directories and load all *.conf files
 
-![Gitlab - New Project](images/Gitlab - New Project.png)
+![Gitlab - New Project](/images/Gitlab - New Project.png)
 
 Once you have created your Project to host your Icinga2 configuration files, create your first config file.
 
-![Gitlab - New File](images/Gitlab - New File.png)
+![Gitlab - New File](/images/Gitlab - New File.png)
 
 * Note: If you already have a directory on your Icinga2 server and you want to load all the files into Gitlab into the new
 project, follow the instructions in the new Project under the 'Existing Foler' section
 
 For our first test, we will create *server1.conf* and have it ping localhost/127.0.0.1
 
-![Gitlab - server1](images/Gitlab - server1.png)
+![Gitlab - server1](/images/Gitlab - server1.png)
 
 ```
 object Host server1 {
@@ -200,7 +200,7 @@ Enter in the following variables:
 * ICINGA_SERVER - The IP/DNS Name of your Icinga2 server
 * ICINGA_CONFIG_DIR - The directory where your Icinga2 config lives as well as the 'gitlab-icinga2-cd.sh' script
 
-![Gitlab - variables](images/Gitlab - variables.png)
+![Gitlab - variables](/images/Gitlab - variables.png)
 
 Once you have put them all in, click on 'Hide values' and then on 'Save variables'
 
@@ -266,25 +266,25 @@ Deploy to Icinga2 Production:
 
 As soon as you save this file, your Gitlab will start to run this job.  Under the CI / CD -> Jobs menu, you should see something happening:
 
-![Gitlab - job passed](images/Gitlab - job passed.png)
+![Gitlab - job passed](/images/Gitlab - job passed.png)
 
 If something goes wrong, the job might fail:
 
-![Gitlab - job passed](images/Gitlab - job failed.png)
+![Gitlab - job passed](/images/Gitlab - job failed.png)
 
 If you click ont the 'Passed' for 'Failed' box you will see a terminal that will explain what worked or what went wrong.
 
 Here are examples of the 'Passed' jobs for the 'Test' and 'Deploy' stages:
 
 Test:
-![Gitlab - job passed test](images/Gitlab - job terminal passed test.png)
+![Gitlab - job passed test](/images/Gitlab - job terminal passed test.png)
 
 Deploy:
-![Gitlab - job passed deploy](images/Gitlab - job terminal passed deploy.png)
+![Gitlab - job passed deploy](/images/Gitlab - job terminal passed deploy.png)
 
 Here is an example of a 'Failed' job for the 'Test' stage.  A configuration file was created with invalid data:
 
-![Gitlab - job passed deploy](images/Gitlab - job terminal failed test.png)
+![Gitlab - job passed deploy](/images/Gitlab - job terminal failed test.png)
 
 # Conclusion
 
