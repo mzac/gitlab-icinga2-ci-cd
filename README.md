@@ -2,19 +2,18 @@
 
 This repository will outline the required steps to integrate Gitlab and Icinga2 for configuration managment.
 
-This is a useful option for either a small or large Icinga2 installation as managing hosts, templates though Gitlab (or any
-other git solution) is an easy way to manage changes to files, delegate changes, etc.
+This is a useful option for either a small or large Icinga2 installation as managing hosts or templates though Gitlab is an easy way to manage changes to files, delegate changes, revert back changes, etc.
 
 For now, I am focusing on the integration with Gitlab and the Gitlab runner with Docker, however this may apply to other Git platforms.
 
 Also, I am not going to go into the installation of Icinga2, Gitlab or the Gitlab runner, there is plenty of documentation out there 
 on how to install these products.
 
-If you feel you can help improve this setup, please feel free to submit an issue with your suggestions.
+If you feel you can help improve this setup, please feel free to submit an issue or a pull request with your suggestions.
 
 # Requirements
 
-* Icinga2 server - https://www.icinga.com
+* Icinga2 server on Linux - https://www.icinga.com
 * Gitlab server - https://www.gitlab.com
 * Gitlab runner - https://docs.gitlab.com/runner/
 * Access to a Linux CLI
@@ -23,8 +22,7 @@ If you feel you can help improve this setup, please feel free to submit an issue
 
 On your Gitlab installation, create a Project that will contain your Icinga2 configuration files.  
 
-* Note: You can create directories if you'd to make it easier to track your files, such as a directory for servers, routers, etc.
-Icinga2 will parse through directories and load all *.conf files
+* Note: You can create directories if you'd to make it easier to track your files, such as a directory for servers, routers, templates, etc.  Icinga2 will parse through directories and load all *.conf files
 
 ![Gitlab - New Project](/images/new_project.png)
 
@@ -51,8 +49,7 @@ object Host server1 {
 
 # Create runner script
 
-We are also going to create another new file that will be used by Gitlab to pull any updates to the Icinga2 server
-and reload the configuration.  Follow the same steps as above to create another file named *gitlab-icinga2-cd.sh*
+We are also going to create a script that will be used by Gitlab to pull any updates to the Icinga2 server and reload the configuration.  Follow the same steps as above to create another file named *gitlab-icinga2-cd.sh*
 
 ```
 #!/bin/bash
@@ -62,8 +59,7 @@ git pull
 systemctl reload icinga2
 ```
 
-* Note: You may choose a different directory that I have specified, please make sure to set it to the directory where you want to store your Icinga2 config files. 
-Depending on your installation, if you're not running as 'root', you may need to add a 'sudo' command before the 'systemctl reload icinga2'
+* Note: You may choose a different directory that I have specified, please make sure to set it to the directory where you want to store your Icinga2 config files.  Also, depending on your installation, if you're not running as 'root', you may need to add a 'sudo' command before the 'systemctl reload icinga2'
 
 # Cloning the project
 
@@ -78,7 +74,7 @@ cd private
 git clone git@<git server>:<gitlab username>/icinga2-configuration.git .
 ```
 
-Now that the files are cloned, go ahead and reload Icinga2 and you should see the node we created through Gitlab in the Icingaweb2 interface
+Now that the files are cloned, go ahead and reload Icinga2 and you should see the server we created through Gitlab in the Icingaweb2 interface.
 
 ```
 systemctl reload icinga2
@@ -86,14 +82,13 @@ systemctl reload icinga2
 
 # Changing the script to executable
 
-There is no easy way though the Gitlab GUI to change files to executable, so we need to fix the permissons on the 'gitlab-icinga2-cd.sh' script and
-then upload it back to the Gitlab server
+AFAIK, there is no easy way though the Gitlab GUI to change files to executable, so we need to fix the permissons on the 'gitlab-icinga2-cd.sh' script and then upload it back to the Gitlab server.
 
 ```
 cd /etc/icinga2/conf.d/private
 chmod a+x gitlab-icinga2-cd.sh
 git add .
-git commit -m "Change permissions on gitlab-icinga2-cd.sh"
+git commit -m "Change permissions on gitlab-icinga2-cd.sh to executable"
 git push -u origin master
 ```
 
@@ -101,10 +96,9 @@ git push -u origin master
 
 * Instructions here too: https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2
 
-At this point we need to generate some SSH keys so that the Docker instance that will push the config to the Icinga2 server can communicate
-with your production Icinga2 server.
+At this point we need to generate some SSH keys so that the Docker instance that will run in the Gitlab runner can push the config to the Icinga2 server.
 
-Drop to a linux cli and execute the following making sure to specify the file '/tmp/gitlab-icinga2-ssh' where we want the keys we generate to be stored
+Drop to a linux cli and execute the following making sure to specify the file '/tmp/gitlab-icinga2-ssh' where we want the keys we generate to be generated.
 
 ```
 root@localhost:~# ssh-keygen
@@ -152,7 +146,7 @@ root@icinga2-prod:~# echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDMPFp66Hk4txKZH
 
 Now we need to copy over the private key to put into our Gitlab project:
 
-* Note again, please generate your own keys, do not use these example keys!!!
+* Note: Again, PLEASE generate your own keys, do not use these example keys!!!
 
 ```
 root@localhost:~# cat /tmp/gitlab-icinga2-ssh
@@ -189,7 +183,7 @@ Copy ~~this~~ your private key to your clipboard and go back to your Gitlab proj
 
 # Gitlab variables
 
-Now that we have the private key, we need to add it into our project as a 'variable'
+Now that we have the private key, we need to add it into our project as a 'variable'.
 
 In your project, go to:
 
@@ -207,16 +201,15 @@ Enter in the following variables:
 
 ![Gitlab - variables](/images/variables.png)
 
-Once you have put them all in, click on 'Hide values' and then on 'Save variables'
+Once you have put them all in, click on 'Hide values' and then on 'Save variables'.
 
 # Gitlab .gitlab-ci.yml configuration file
 
-We are now ready to provide our project with the '.gitlab-ci.yml' file.  This file will tell Gitlab what to do
-when we make commits to our project.
+We are now ready to provide our project with the '.gitlab-ci.yml' file.  This file will tell Gitlab what to do when we make commits to our project.
 
 * Read more here: https://docs.gitlab.com/ee/ci/quick_start/
 
-As we did before when we created our first server, create a new file and name it '.gitlab-ci.yml' (yes, with a leading 'dot .')
+As we did before when we created our first server, create a new file and name it '.gitlab-ci.yml' (yes, with a leading 'dot .').
 
 ```
 image: debian:latest
