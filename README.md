@@ -55,8 +55,15 @@ We are also going to create a script that will be used by Gitlab to pull any upd
 #!/bin/bash
 
 cd /etc/icinga2/conf.d/private
-git pull
-systemctl reload icinga2
+
+export GIT_OUTPUT=`git pull`
+
+if [[ $GIT_OUTPUT = *".conf"* ]]; then
+  echo "Changes made, reloading Icinga2"
+  systemctl reload icinga2
+else
+  echo "No changes made, NOT reloading Icinga2
+fi
 ```
 
 * Note: You may choose a different directory that I have specified, please make sure to set it to the directory where you want to store your Icinga2 config files.  Also, depending on your installation, if you're not running as 'root', you may need to add a 'sudo' command before the 'systemctl reload icinga2'
