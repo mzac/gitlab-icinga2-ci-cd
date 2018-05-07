@@ -11,6 +11,13 @@ on how to install these products.
 
 If you feel you can help improve this setup, please feel free to submit an issue or a pull request with your suggestions.
 
+# Todo
+
+Some things I'd like to improve:
+
+* Pull less files from apt repositories when jobs run (maybe a custom docker image?)
+* Improve on the script that runs on the Icinga2 server for better error checking
+
 # Requirements
 
 * Icinga2 server on Linux - https://www.icinga.com
