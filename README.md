@@ -17,8 +17,8 @@ Some things I'd like to improve:
 
 * ~~Pull less files from apt repositories when jobs run (maybe a custom docker image?)~~
   * Done: 
-    * https://github.com/mzac/icinga2-check-config
-    * https://github.com/mzac/icinga2-push-config
+    * https://github.com/mzac/icinga2-check-config/blob/master/Dockerfile
+    * https://github.com/mzac/icinga2-push-config/blob/master/Dockerfile
 * Improve on the script that runs on the Icinga2 server for better error checking
 * Add Icingaweb2 screenshots to show what is happening
 
