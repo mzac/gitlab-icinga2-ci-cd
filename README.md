@@ -16,7 +16,7 @@ If you feel you can help improve this setup, please feel free to submit an issue
 Some things I'd like to improve:
 
 * ~~Pull less files from apt repositories when jobs run (maybe a custom docker image?)~~
-  * Done: 
+  * Done!  This makes verifying and deploying a lot faster :smiley:
     * https://github.com/mzac/icinga2-check-config/blob/master/Dockerfile
     * https://github.com/mzac/icinga2-push-config/blob/master/Dockerfile
 * Improve on the script that runs on the Icinga2 server for better error checking
@@ -152,6 +152,13 @@ To deploy the public key to our production Icinga2 server, look at your file and
 
 * Note, please generate your own keys, do not use these example keys!!!
 
+Example:
+```
+root@localhost:~# cat /tmp/gitlab-icinga2-ssh.pub
+ssh-rsa <ssh public key> root@localhost
+```
+
+It should look like this:
 ```
 root@localhost:~# cat /tmp/gitlab-icinga2-ssh.pub
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDMPFp66Hk4txKZHOZ97sYyuhqYKfzork6uZdBiJ7VEkDQxqR3xHz8Qz67Z19je/oVCPxEKajdQfcm8a0CWXstfnDa2zO4pqfj7Y3LRDW15fmqdNCa6/I0K0XMX8tsUgFgnwsn+O4jn/8p/fq815pWiGWRIPaOYfX8CtXZerq32QujonWFJYhwjYYK9PUYnWg9T/7miMNcjK6/i/l8r/5tD3TIp6yyZgiwEJtiETh9zvDKLPTkjPSnyc+Gtb9kumZ1kiZOX84iOS/EsVQkgMtKsAGNGD6+oCK1cbXikW9VEOm0pwxTYb0ySr/KNlGeJge5gj2kYDNJJ+cmGN0+MHbAf root@localhost
@@ -159,6 +166,13 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDMPFp66Hk4txKZHOZ97sYyuhqYKfzork6uZdBiJ7VE
 
 Now we are ready to deploy the public key on your Icinga2 server:
 
+Example:
+```
+root@icinga2-prod:~# mkdir /root/.ssh
+root@icinga2-prod:~# echo "ssh-rsa <ssh public key> root@localhost" >> /root/.ssh/authorized_keys
+```
+
+It should look like this:
 ```
 root@icinga2-prod:~# mkdir /root/.ssh
 root@icinga2-prod:~# echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDMPFp66Hk4txKZHOZ97sYyuhqYKfzork6uZdBiJ7VEkDQxqR3xHz8Qz67Z19je/oVCPxEKajdQfcm8a0CWXstfnDa2zO4pqfj7Y3LRDW15fmqdNCa6/I0K0XMX8tsUgFgnwsn+O4jn/8p/fq815pWiGWRIPaOYfX8CtXZerq32QujonWFJYhwjYYK9PUYnWg9T/7miMNcjK6/i/l8r/5tD3TIp6yyZgiwEJtiETh9zvDKLPTkjPSnyc+Gtb9kumZ1kiZOX84iOS/EsVQkgMtKsAGNGD6+oCK1cbXikW9VEOm0pwxTYb0ySr/KNlGeJge5gj2kYDNJJ+cmGN0+MHbAf root@localhost" >> /root/.ssh/authorized_keys
@@ -199,7 +213,7 @@ bIWtUU081vklopv8UxQk2YIrDD4PtDBlAASMEoJHmPEnsC7b3dKN
 -----END RSA PRIVATE KEY-----
 ```
 
-Copy ~~this~~ your private key to your clipboard and go back to your Gitlab project.
+Copy ~~this~~ YOUR private key to your clipboard and go back to your Gitlab project.
 
 # Gitlab variables
 
@@ -217,7 +231,7 @@ Enter in the following variables:
 * ICINGA_SERVER - The IP/DNS Name of your Icinga2 server
 * ICINGA_CONFIG_DIR - The directory where your Icinga2 config lives as well as the 'gitlab-icinga2-cd.sh' script
 
-* Note: order does not matter
+* Note: The order that you put the variables in does not matter.
 
 ![Gitlab - variables](/images/variables.png)
 
