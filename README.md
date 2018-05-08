@@ -46,7 +46,7 @@ For our first test, we will create *server1.conf* and have it ping localhost/127
 ![Gitlab - server1](/images/server1.png)
 
 ```
-object Host server1 {
+object Host "server1" {
     import "generic-host"
     address = "127.0.0.1"
 }
