@@ -22,6 +22,7 @@ Some things I'd like to improve:
     * Note: you can still use the debian image .gitlab-ci.yml if you prefer: https://github.com/mzac/gitlab-icinga2-ci-cd/blob/master/gitlab-ci.yml.debian-image
 * Improve on the script that runs on the Icinga2 server for better error checking
 * Add Icingaweb2 screenshots to show what is happening
+* Find a way to push config changes to Icinga2 running on Windows - might need some help here!
 
 # Requirements
 
