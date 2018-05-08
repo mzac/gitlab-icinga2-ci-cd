@@ -19,6 +19,7 @@ Some things I'd like to improve:
   * Done!  This makes verifying and deploying a lot faster :smiley:
     * https://github.com/mzac/icinga2-check-config/blob/master/Dockerfile
     * https://github.com/mzac/icinga2-push-config/blob/master/Dockerfile
+    * Note: you can still use the debian image .gitlab-ci.yml if you prefer: https://github.com/mzac/gitlab-icinga2-ci-cd/blob/master/gitlab-ci.yml.debian-image
 * Improve on the script that runs on the Icinga2 server for better error checking
 * Add Icingaweb2 screenshots to show what is happening
 
@@ -26,6 +27,7 @@ Some things I'd like to improve:
 
 * Icinga2 server on Linux - https://www.icinga.com
 * Gitlab server - https://www.gitlab.com
+* Docker - https://www.docker.com
 * Gitlab runner - https://docs.gitlab.com/runner/
 * Access to a Linux CLI
 
@@ -282,6 +284,9 @@ Deploy to Icinga2 Production:
     # Only push changes to prod server on the master branch
     - master
 ```
+
+* Note: This setup uses two custom Docker images, but you can still use the debian image .gitlab-ci.yml if you prefer: https://github.com/mzac/gitlab-icinga2-ci-cd/blob/master/gitlab-ci.yml.debian-image
+
 
 As soon as you save this file, your Gitlab will start to run this job.  Under the CI / CD -> Jobs menu, you should see something happening:
 
