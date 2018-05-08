@@ -60,7 +60,9 @@ object Host "server1" {
 
 # Create runner script
 
-We are also going to create a script that will be used by Gitlab to pull any updates to the Icinga2 server and reload the configuration.  Follow the same steps as above to create another file named *gitlab-icinga2-cd.sh*
+We are also going to create a script that will reside on the Icinga2 server and will be called by Gitlab via SSH to pull any updates and reload the configuration.  If the script detects that no .conf files were modified, Icinga2 will not be reloaded.
+
+Follow the same steps as above to create another file named *gitlab-icinga2-cd.sh* residing in the root directory of your project.
 
 ```
 #!/bin/bash
@@ -77,7 +79,7 @@ else
 fi
 ```
 
-* Note: You may choose a different directory that I have specified, please make sure to set it to the directory where you want to store your Icinga2 config files.  Also, depending on your installation, if you're not running as 'root', you may need to add a 'sudo' command before the 'systemctl reload icinga2'
+* Note: You may choose a different directory that I have specified (/etc/icinga2/conf.d/private), please make sure to set it to the directory where you want to store your Icinga2 config files.  Also, depending on your installation, if you're not running as 'root', you may need to add a 'sudo' command before the 'systemctl reload icinga2'
 
 # Cloning the project
 
