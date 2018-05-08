@@ -15,7 +15,10 @@ If you feel you can help improve this setup, please feel free to submit an issue
 
 Some things I'd like to improve:
 
-* Pull less files from apt repositories when jobs run (maybe a custom docker image?)
+* ~~Pull less files from apt repositories when jobs run (maybe a custom docker image?)~~
+  * Done: 
+    * https://github.com/mzac/icinga2-check-config
+    * https://github.com/mzac/icinga2-push-config
 * Improve on the script that runs on the Icinga2 server for better error checking
 * Add Icingaweb2 screenshots to show what is happening
 
@@ -226,32 +229,20 @@ We are now ready to provide our project with the '.gitlab-ci.yml' file.  This fi
 
 As we did before when we created our first server, create a new file and name it '.gitlab-ci.yml' (yes, with a leading 'dot .').
 
-```
-image: debian:latest
-
-before_script:
-  # check if variables are set in gitlab project
-  - if [ -z "$SSH_PRIVATE_KEY" ]; then exit 1; fi
-  - if [ -z "$SSH_USER" ]; then exit 1; fi
-  - if [ -z "$ICINGA_SERVER" ]; then exit 1; fi
-  - if [ -z "$ICINGA_CONFIG_DIR" ]; then exit 1; fi
-  - apt-get --quiet update --yes
-
+```yaml
 stages:
   - test
   - deploy
 
 Test Icinga2 Config:
+  image: mzac23/icinga2-check-config
   stage: test
   script:
-    # Get required packages to install Icinga
-    - apt-get --quiet install --yes curl gnupg lsb-release
-    # Install Icinga2
-    - curl -s https://packages.icinga.com/icinga.key | apt-key add -
-    - echo "deb http://packages.icinga.org/debian icinga-$(lsb_release -cs) main" > /etc/apt/sources.list.d/icinga2.list
-    - export DEBIAN_FRONTEND=noninteractive
-    - apt-get update
-    - apt-get install -y --no-install-recommends icinga2
+    # check if variables are set in gitlab project
+    - if [ -z "$SSH_PRIVATE_KEY" ]; then exit 1; fi
+    - if [ -z "$SSH_USER" ]; then exit 1; fi
+    - if [ -z "$ICINGA_SERVER" ]; then exit 1; fi
+    - if [ -z "$ICINGA_CONFIG_DIR" ]; then exit 1; fi
     # Copy config from Gitlab to Icinga2 test dir
     - mkdir /etc/icinga2/conf.d/test-config
     - cp -a -R * /etc/icinga2/conf.d/test-config
@@ -259,10 +250,9 @@ Test Icinga2 Config:
     - icinga2 daemon -C
     
 Deploy to Icinga2 Production:
+  image: mzac23/icinga2-push-config
   stage: deploy
   script:
-    # Install ssh client
-    - apt-get --quiet install --yes openssh-client
     # Setup ssh key
     - mkdir -p ~/.ssh
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
