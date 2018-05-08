@@ -1,0 +1,35 @@
+stages:
+  - test
+  - deploy
+
+Test Icinga2 Config:
+  image: mzac23/icinga2-check-config
+  stage: test
+  script:
+    # check if variables are set in gitlab project
+    - if [ -z "$SSH_PRIVATE_KEY" ]; then exit 1; fi
+    - if [ -z "$SSH_USER" ]; then exit 1; fi
+    - if [ -z "$ICINGA_SERVER" ]; then exit 1; fi
+    - if [ -z "$ICINGA_CONFIG_DIR" ]; then exit 1; fi
+    # Copy config from Gitlab to Icinga2 test dir
+    - mkdir /etc/icinga2/conf.d/test-config
+    - cp -a -R * /etc/icinga2/conf.d/test-config
+    # Verify Icinga2 config
+    - icinga2 daemon -C
+    
+Deploy to Icinga2 Production:
+  image: mzac23/icinga2-push-config
+  stage: deploy
+  script:
+    # Setup ssh key
+    - mkdir -p ~/.ssh
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+    - chmod 700 ~/.ssh/id_rsa
+    - eval "$(ssh-agent -s)"
+    - ssh-add ~/.ssh/id_rsa
+    - ssh-keyscan -H $ICINGA_SERVER >> ~/.ssh/known_hosts
+    # Copy Icinga2 config to prod server
+    - ssh $SSH_USER@$ICINGA_SERVER $ICINGA_CONFIG_DIR/gitlab-icinga2-cd.sh
+  only:
+    # Only push changes to prod server on the master branch
+    - master
