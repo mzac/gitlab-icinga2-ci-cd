@@ -23,6 +23,8 @@ Some things I'd like to improve:
 * Improve on the script that runs on the Icinga2 server for better error checking
 * Add Icingaweb2 screenshots to show what is happening
 * Find a way to push config changes to Icinga2 running on Windows - might need some help here!
+* Look at uploading configuration to Icinga2 via API and configuration packages
+  * https://www.icinga.com/docs/icinga2/latest/doc/12-icinga2-api/#icinga2-api-config-management
 
 # Requirements
 
